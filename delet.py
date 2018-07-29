@@ -52,8 +52,13 @@ else:
 #run through the channels, yes this is nested pretty badly don't @ me
 for channel in channels:
 	if channel['type'] == 0:
+		#if the channel is in the ignore list, skip
+		if channel['id'] in cfg['ignore_channels']:
+			logger.info("SKIPPING CHANNEL FROM CFG: {0[id]} (#{0[name]})".format(channel))
+			continue
+
 		if discordapi_check_channel_access(channel['id'], discord_headers):
-			print("ALLOWED CHANNEL READ", channel['id'], channel['name'])
+			logger.info("ALLOWED CHANNEL READ: {0[id]} (#{0[name]})".format(channel))
 
 			if args['resumefrom'] and args['resumechannel'] == channel['id']:
 				BEFORE = args['resumefrom']
@@ -88,6 +93,7 @@ for channel in channels:
 
 				#if the LASTID is not changing, we hit the end of the channel
 				if BEFORE == LASTID:
+					logger.info("END OF CHANNEL: LAST ID {}".format(LASTID))
 					break
 				else:
 					BEFORE = LASTID
