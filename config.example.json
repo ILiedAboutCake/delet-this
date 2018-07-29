@@ -1,0 +1,10 @@
+{
+    "guild":"265256381437706240",
+    "token":"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "mode":"regex",
+    "match_regex":"\\b(?:nig(?:ger)?)\\b|\\bnsfl\\b|\\bfag(?:got)?\\b|\\bkys?\\b|\\bkill yourself?\\b|\\bautis[tm]?\\b|\\bretard(?:ed)?\\b",
+    "match_users":["252869311545212928","265255911012958208"],
+    "ignore_channels":["270579644372090880","356781927836942339","270578632026488851","270695480873189376","419976078321385473","273164941857652737"],
+    "archival_enabled":"true",
+    "archival_file":"deleted_this.csv"
+}
