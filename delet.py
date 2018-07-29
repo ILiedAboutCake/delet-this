@@ -69,6 +69,10 @@ for channel in channels:
 				logger.info("GETTING BATCH OF 100 MESSAGES: LAST ID {} in {}".format(BEFORE, channel['name']))
 				msgs = discordapi_get_messages_batch(channel['id'], BEFORE, discord_headers)
 
+				#reloop if we dont get the right api data
+				if msgs is False:
+					continue
+
 				for msg in msgs:
 					LASTID = msg['id']
 

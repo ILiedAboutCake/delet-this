@@ -22,6 +22,7 @@ def discordapi_get_messages_batch(channel, before, header):
         return request.json()
     else:
         logger.warn("DISCORD API PROBLEM! - Got status code {}. Waiting 10 seconds".format(request.status_code))
+        time.sleep(10)
         return False
 
 def discordapi_delete_message(channel, message, header):
@@ -56,5 +57,5 @@ def message_parser_regex(message, regex):
 def archive_message_csv(channel, message, file):
     with open(file, 'a', encoding='utf-8', newline='') as f:
         f_writer = csv.writer(f)
-        f_writer.writerow([message['timestamp'], channel['name'], channel['id'], channel['name'], message['id'], message['author']['id'], message['author']['username'], message['content']])
+        f_writer.writerow([message['timestamp'], channel['id'], channel['name'], message['id'], message['author']['id'], message['author']['username'], message['content']])
     return True
