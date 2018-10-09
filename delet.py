@@ -22,7 +22,11 @@ except Exception as e:
 arg = argparse.ArgumentParser()
 arg.add_argument("-rf", "--resumefrom")
 arg.add_argument("-rc", "--resumechannel")
+arg.add_argument("-d", "--dryrun")
 args = vars(arg.parse_args())
+
+if args['dryrun']:
+	logger.warn("DRY: Dry run mode enabled. Messages will not be deleted, but the bot will act like it is.")
 
 #build the discord headers
 discord_headers = {'Authorization':'Bot '+cfg['token']}
@@ -88,9 +92,12 @@ for channel in channels:
 					if message_result:
 						logger.info("MSG FOUND: Reason: {} Message: {}".format(message_result, msg['content'].lower()))
 
-						delet = discordapi_delete_message(channel['id'], msg['id'], discord_headers)
-						while delet is not True:
+						if args['dryrun']:
+							logger.debug("DRY: Message not being deleted. --dryrun enabled!")
+						else:
 							delet = discordapi_delete_message(channel['id'], msg['id'], discord_headers)
+							while delet is not True:
+								delet = discordapi_delete_message(channel['id'], msg['id'], discord_headers)
 
 						if cfg['archival_enabled']:
 							archive_message_csv(channel, msg, cfg['archival_file'])
