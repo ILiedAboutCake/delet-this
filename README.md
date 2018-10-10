@@ -1,10 +1,11 @@
 # Delet This
 #### Purge your Discord server of unwanted previous messages by regex or account IDs
 
-Discord makes it difficult to truely remove data from the platform. Using this script you can scrub your entire server back to the first messages at creation using 2 different matching patterns:
+Discord makes it difficult to truly remove data from the platform. Using this script you can scrub your entire server back to the first messages at creation using 3 different matching patterns:
 
-1. Regex based deletion on the message contents
-2. Message deletion based on the creators user ID
+1. Regex based deletion on the message contents for all users
+2. Message deletion based on user IDs
+3. Message deletion based on on user IDs AND a regex pattern.
 
 It is highly recommended setting your Discord [client to developer mode](https://support.discordapp.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-)
 and having a basic understanding of the [Discord snowflake ID format](https://discordapp.com/developers/docs/reference#snowflakes) before attempting to use this script.
@@ -31,7 +32,7 @@ Running userbots will get your account disabled and is NOT recommended.**
 |---------|----------------|
 | guild   | Discord Server Snowflake |
 | token   | Discord Bot Token |
-| mode    | "regex" or "users" |
+| mode    | "regex", "users", or "regexuser" |
 | match_regex | regex to compare messages against if mode is set to regex |
 | match_users | list of Discord User Snowflakes if mode is set to users |
 | ignore_channels | list of Discord Channel Snowflakes to bypass, can be empty list |
@@ -40,18 +41,19 @@ Running userbots will get your account disabled and is NOT recommended.**
 
 ## Command Line Parameters
 
-These are optional. Best used to pick off where the script stopped on a crash or disconnect.
+These are optional. Best used to pick off where the script stopped on a crash or disconnect or debugging.
 
 ```
 --resumefrom <Discord Message Snowflake>
 --resumechannel <Discord Channel Snowflake>
+--dryrun <bool, disables sending delete commands to API>
 ```
 
 ## Running delet.py
 ```
 python .\delet.py
 python .\delet.py --resumechannel 265256381437706240
-python .\delet.py --resumechannel 265256381437706240 --resumefrom 469620983704190999
+python .\delet.py --resumechannel 265256381437706240 --resumefrom 469620983704190999 --dryrun
 ```
 
 ## Notes

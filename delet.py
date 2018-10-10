@@ -22,7 +22,7 @@ except Exception as e:
 arg = argparse.ArgumentParser()
 arg.add_argument("-rf", "--resumefrom")
 arg.add_argument("-rc", "--resumechannel")
-arg.add_argument("-d", "--dryrun")
+arg.add_argument("-d", "--dryrun", action='store_true')
 args = vars(arg.parse_args())
 
 if args['dryrun']:
@@ -84,6 +84,8 @@ for channel in channels:
 						message_result = message_parser_user(msg, cfg['match_users'])
 					elif cfg['mode'].lower() == "regex":
 						message_result = message_parser_regex(msg, cfg['match_regex'])
+					elif cfg['mode'].lower() == "regexuser":
+						message_result = message_parser_regexuser(msg, cfg['match_users'], cfg['match_regex'])
 					else:
 						logger.critical("Unsupported mode! (should be set to either users or regex)")
 						exit()

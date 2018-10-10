@@ -54,6 +54,16 @@ def message_parser_regex(message, regex):
     else:
         return regex_found
 
+def message_parser_regexuser(message, users, regex):
+    if message['author']['id'] in users:
+        regex_found = re.findall(regex, message['content'].lower())
+        if len(regex_found) == 0:
+            return False
+        else:
+            return regex_found
+    else:
+        return False
+
 def archive_message_csv(channel, message, file):
     with open(file, 'a', encoding='utf-8', newline='') as f:
         f_writer = csv.writer(f)
