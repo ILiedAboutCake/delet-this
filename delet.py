@@ -76,6 +76,9 @@ for channel in channels:
 				#reloop if we dont get the right api data
 				if msgs is False:
 					continue
+				
+				if msgs is None:
+					logger.warn("DISCORD API ERROR: Recieved None for messages batch, trying again.")
 
 				for msg in msgs:
 					LASTID = msg['id']
