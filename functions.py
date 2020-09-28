@@ -20,6 +20,11 @@ def discordapi_get_messages_batch(channel, before, header):
     request = requests.get("https://discordapp.com/api/channels/"+channel+"/messages?limit=100&before="+before, headers=header)
     if request.status_code == 200:
         return request.json()
+    elif request.status_code == 429:
+        json = request.json()
+        wait_timer = get_cooldown_future(json)
+        logger.warn("DISCORD API RATE LIMIT! [getmsgs] - Backing off and retrying in {} seconds".format(wait_timer))
+        time.sleep(wait_timer)
     else:
         logger.warn("DISCORD API PROBLEM! - Got status code {}. Waiting 10 seconds".format(request.status_code))
         time.sleep(10)
@@ -31,13 +36,17 @@ def discordapi_delete_message(channel, message, header):
         return True
     elif request.status_code == 429:
         json = request.json()
-        wait_timer = round(float(json['retry_after'] / 1000) + 1, 3)
-        logger.warn("DISCORD API RATE LIMIT! - Backing off and retrying in {} seconds".format(wait_timer))
+        wait_timer = get_cooldown_future(json)
+        logger.warn("DISCORD API RATE LIMIT! [delete] - Backing off and retrying in {} seconds".format(wait_timer))
         time.sleep(wait_timer)
         return False
     else:
         logger.error("DISCORD API UNKNOWN ERROR! Status code {}".format(request.status_code))
         return False
+
+def get_cooldown_future(rsp):
+    wait_timer = round(float(rsp['retry_after'] / 1000) + 1, 2)
+    return(wait_timer)
 
 #return True if we should delete the message
 def message_parser_user(message, users):
