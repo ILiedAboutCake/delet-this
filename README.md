@@ -1,4 +1,5 @@
 # Delet This
+
 #### Purge your Discord server of unwanted previous messages by regex or account IDs
 
 Discord makes it difficult to truly remove data from the platform. Using this script you can scrub your entire server back to the first messages at creation using 3 different matching patterns:
@@ -14,6 +15,7 @@ and having a basic understanding of the [Discord snowflake ID format](https://di
 Running userbots will get your account disabled and is NOT recommended.**
 
 ## Example config.json
+
 ```Json
 {
     "guild":"265256381437706240",
@@ -28,16 +30,16 @@ Running userbots will get your account disabled and is NOT recommended.**
 
 ```
 
-| Setting | Accepted Value |
-|---------|----------------|
-| guild   | Discord Server Snowflake |
-| token   | Discord Bot Token |
-| mode    | "regex", "users", or "regexuser" |
-| match_regex | regex to compare messages against if mode is set to regex |
-| match_users | list of Discord User Snowflakes if mode is set to users |
-| ignore_channels | list of Discord Channel Snowflakes to bypass, can be empty list |
-| archival_enabled | true or false, toggles saving of deleted messages |
-| archival_file | location to save deleted messages csv if archival_enabled is true |
+| Setting          | Accepted Value                                                    |
+| ---------------- | ----------------------------------------------------------------- |
+| guild            | Discord Server Snowflake                                          |
+| token            | Discord Bot Token                                                 |
+| mode             | "regex", "users", or "regexuser"                                  |
+| match_regex      | regex to compare messages against if mode is set to regex         |
+| match_users      | list of Discord User Snowflakes if mode is set to users           |
+| ignore_channels  | list of Discord Channel Snowflakes to bypass, can be empty list   |
+| archival_enabled | true or false, toggles saving of deleted messages                 |
+| archival_file    | location to save deleted messages csv if archival_enabled is true |
 
 ## Command Line Parameters
 
@@ -47,9 +49,11 @@ These are optional. Best used to pick off where the script stopped on a crash or
 --resumefrom <Discord Message Snowflake>
 --resumechannel <Discord Channel Snowflake>
 --dryrun <bool, disables sending delete commands to API>
+--lookback <int>, only go back x messages per channel.
 ```
 
 ## Running delet.py
+
 ```
 python .\delet.py
 python .\delet.py --resumechannel 265256381437706240

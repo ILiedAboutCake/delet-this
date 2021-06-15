@@ -22,6 +22,7 @@ except Exception as e:
 arg = argparse.ArgumentParser()
 arg.add_argument("-rf", "--resumefrom")
 arg.add_argument("-rc", "--resumechannel")
+arg.add_argument("-lb", "--lookback")
 arg.add_argument("-d", "--dryrun", action='store_true')
 args = vars(arg.parse_args())
 
@@ -69,7 +70,10 @@ for channel in channels:
 			else:
 				BEFORE = channel['last_message_id']
 
+			history = 0
+
 			while True:
+				
 				logger.info("GETTING BATCH OF 100 MESSAGES: LAST ID {} in {}".format(BEFORE, channel['name']))
 				msgs = discordapi_get_messages_batch(channel['id'], BEFORE, discord_headers)
 
@@ -80,6 +84,8 @@ for channel in channels:
 				if msgs is None:
 					logger.warn("DISCORD API ERROR: Recieved None for messages batch, trying again.")
 					continue
+
+				history = history + len(msgs)
 
 				for msg in msgs:
 					LASTID = msg['id']
@@ -107,6 +113,12 @@ for channel in channels:
 
 						if cfg['archival_enabled']:
 							archive_message_csv(channel, msg, cfg['archival_file'])
+
+				# if we are in limited lookback mode, hit n and move to next channel
+				if args['lookback'] != 0:
+					if history >= int(args['lookback']):
+						logger.info("LOOKBACK ENABLED, LOOPED THROUGH {0} MESSAGES IN {1}".format(history, LASTID))
+						break
 
 				#if the LASTID is not changing, we hit the end of the channel
 				if BEFORE == LASTID:
